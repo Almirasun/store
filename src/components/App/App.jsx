@@ -1,11 +1,20 @@
 import React from 'react'
 import AppRoutes from '../Routes/Routes';
-import '../../styles/App.css'
+import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
+import Sidebar from '../Sidebar/Sidebar';
 
 const App = () => {
     return (
         <div className='app'>
-            <AppRoutes />
+            <Header />
+            
+            <div className="container">
+                <Sidebar />
+                <AppRoutes />
+            </div>
+
+            <Footer />
         </div>
     );
 }
