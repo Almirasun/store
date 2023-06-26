@@ -11,8 +11,8 @@ const Banner = () => (
       <button className={styles.more}>See more</button>
     </div>
     <div className={styles.right} style={{backgroundImage: `url(${bannerImg})`}}>
-      <p className={styles.dicount}>
-        save up to<span>50%</span>off
+      <p className={styles.discount}>
+        save up to<span> 50% </span>off
       </p>
     </div>
   </section>
