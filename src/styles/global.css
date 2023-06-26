@@ -10,7 +10,7 @@ body {
   font-weight: 500;
   padding-bottom: 20px;
 }
-/* 
+
 h1,
 h2,
 h3,
@@ -22,7 +22,7 @@ p {
   padding: 0;
   font-size: 16px;
   line-height: 24px;
-} */
+}
 
 * {
   box-sizing: border-box;
@@ -85,6 +85,19 @@ section {
   border-radius: 6px;
 }
 
+button {
+  background: var(--violet-dark);
+  border-radius: 6px;
+  padding: 9px 20px;
+  font-weight: 600;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--violet);
+}
+
 h2 {
   font-weight: 600;
   font-size: 20px;
@@ -92,3 +105,25 @@ h2 {
   text-align: center;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+input {
+  padding: 0;
+}
+
+.preloader {
+  flex-grow: 1;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
