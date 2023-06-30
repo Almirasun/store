@@ -1,26 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../utils/routes";
 import styles from "../../styles/Product.module.css";
 
-const Product = () => {
+const SIZES = [4, 4.5, 5];
+
+const Product = (item) => {
+  const { title, price, images, description } = item;
+
+  const [currentImage, setCurrentImage] = useState();
+  const [currentSize, setCurrentSize] = useState();
+
+  useEffect(() => {
+    if (!images.length) return;
+
+    setCurrentImage(images[0]);
+  }, [images]);
 
   return (
     <section className={styles.product}>
       <div className={styles.images}>
         <div
           className={styles.current}
+          style={{ backgroundImage: `url(${currentImage})` }}
         />
         <div className={styles["images-list"]}>
-          <div
-            className={styles.image}
-            onClick={() => {}}
-          />
+          {images.map((image, i) => (
+            <div
+              key={i}
+              className={styles.image}
+              style={{ backgroundImage: `url(${image})` }}
+              onClick={() => setCurrentImage(image)}
+            />
+          ))}
         </div>
       </div>
       <div className={styles.info}>
-        <h1 className={styles.title}>Lorem</h1>
-        <div className={styles.price}>ipsum dolor</div>
+        <h1 className={styles.title}>{title}</h1>
+        <div className={styles.price}>{price}$</div>
         <div className={styles.color}>
           <span>Color:</span> Green
         </div>
@@ -28,16 +45,26 @@ const Product = () => {
           <span>Sizes:</span>
 
           <div className={styles.list}>
-            <div onClick={() => {}} className={styles.size}>
-              4, 5, 6
-            </div>
+            {SIZES.map((size) => (
+              <div
+                onClick={() => setCurrentSize(size)}
+                className={`${styles.size} ${
+                  currentSize === size ? styles.active : ""
+                }`}
+                key={size}
+              >
+                {size}
+              </div>
+            ))}
           </div>
         </div>
 
-        <p className={styles.description}>Super boochii</p>
+        <p className={styles.description}>{description}</p>
 
         <div className={styles.actions}>
-          <button className={styles.add}>Add to cart</button>
+          <button className={styles.add} disabled={!currentSize}>
+            Add to cart
+          </button>
           <button className={styles.favorite}>Add to favorites</button>
         </div>
 
