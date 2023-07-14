@@ -13,7 +13,7 @@ const SingleProduct = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const navigate = useNavigate();
-  const {related} = useSelector(({ products }) => products);
+  const { list, related } = useSelector(({ products }) => products);
 
   const { data, isLoading, isFetching, isSuccess } = useGetProductQuery({ id });
   console.log(isLoading);
@@ -25,11 +25,10 @@ const SingleProduct = () => {
   }, [isLoading, isFetching, isSuccess]);
 
   useEffect(() => {
-    if (data) {
-      dispatch(getRelatedProducts(data.category.id));
-    }
-    console.log(data);
-  }, [data]);
+    if (!data || !list.length) return;
+
+    dispatch(getRelatedProducts(data.category.id));
+  }, [data, dispatch, list.length]);
 
   return !data ? (
     <section>Loading...</section>

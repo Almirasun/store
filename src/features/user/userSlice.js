@@ -2,23 +2,25 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL } from "../../utils/constants";
 
-// export const getUser = createAsyncThunk(
-//   "user/getUser",
-//   async (_, thunkAPI) => {
-//     try {
-//       const res = await axios(`${BASE_URL}/user?limit=6`);
-//       return res.data;
-//     } catch (err) {
-//       console.log(err);
-//       return thunkAPI.rejectWithValue(err);
-//     }
-//   }
-// );
+export const createUser = createAsyncThunk(
+  "users/createUser",
+  async (payload, thunkAPI) => {
+    try {
+      const res = await axios(`${BASE_URL}/users?limit=6`, payload);
+      return res.data;
+    } catch (err) {
+      console.log(err);
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
 
 const initialState = {
-  currentUser: [],
+  currentUser: null,
   cart: [],
   isLoading: false,
+  formType: "signup",
+  showForm: false
 };
 
 export const userSlice = createSlice({
@@ -39,21 +41,23 @@ export const userSlice = createSlice({
 
       state.cart = newCart;
     },
+    toggleForm: (state, { payload }) => {
+      state.showForm = payload;
+    },
   },
-  //   extraReducers: (builder) => {
-  //     builder.addCase(getUser.pending, (state) => {
-  //       state.isLoading = true; // обрабатывает успешное выполнение действия
-  //     });
-  //     builder.addCase(getUser.fulfilled, (state, { payload }) => {
-  //       state.list = payload;
-  //       state.isLoading = false; // обрабатывает ожидание выполнения действия
-  //     });
-  //     builder.addCase(getUser.rejected, (state) => {
-  //       state.isLoading = false; // обрабатывает ошибки
-  //     });
-  //   },
+  extraReducers: (builder) => {
+    //     builder.addCase(getUser.pending, (state) => {
+    //       state.isLoading = true; // обрабатывает успешное выполнение действия
+    //     });
+    builder.addCase(createUser.fulfilled, (state, { payload }) => {
+      state.currentUser = payload;
+    });
+    //     builder.addCase(getUser.rejected, (state) => {
+    //       state.isLoading = false; // обрабатывает ошибки
+    //     });
+  },
 });
 
-export const { addItemToCart } = userSlice.actions;
+export const { addItemToCart, toggleForm } = userSlice.actions;
 
 export default userSlice.reducer;
