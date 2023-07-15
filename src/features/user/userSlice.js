@@ -6,7 +6,7 @@ export const createUser = createAsyncThunk(
   "users/createUser",
   async (payload, thunkAPI) => {
     try {
-      const res = await axios(`${BASE_URL}/users?limit=6`, payload);
+      const res = await axios.post(`${BASE_URL}/users`, payload);
       return res.data;
     } catch (err) {
       console.log(err);
@@ -15,17 +15,50 @@ export const createUser = createAsyncThunk(
   }
 );
 
-const initialState = {
-  currentUser: null,
-  cart: [],
-  isLoading: false,
-  formType: "signup",
-  showForm: false
+export const loginUser = createAsyncThunk(
+  "users/loginUser",
+  async (payload, thunkAPI) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/auth/login`, payload);
+      const login = await axios(`${BASE_URL}/auth/profile`, {
+        headers: {
+          Authorization: `Bearer ${res.data.access_token}`,
+        },
+      });
+      return login.data;
+    } catch (err) {
+      console.log(err);
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "users/updateUser",
+  async (payload, thunkAPI) => {
+    try {
+      const res = await axios.put(`${BASE_URL}/users/${payload.id}`, payload);
+      return res.data;
+    } catch (err) {
+      console.log(err);
+      return thunkAPI.rejectWithValue(err);
+    }
+  }
+);
+
+const addCurrentUser = (state, { payload }) => {
+  state.currentUser = payload;
 };
 
 export const userSlice = createSlice({
   name: "user",
-  initialState,
+  initialState: {
+    currentUser: null,
+    cart: [],
+    isLoading: false,
+    formType: "signup",
+    showForm: false,
+  },
   reducers: {
     addItemToCart: (state, { payload }) => {
       let newCart = [...state.cart];
@@ -44,20 +77,17 @@ export const userSlice = createSlice({
     toggleForm: (state, { payload }) => {
       state.showForm = payload;
     },
+    toggleFormType: (state, { payload }) => {
+      state.formType = payload;
+    },
   },
   extraReducers: (builder) => {
-    //     builder.addCase(getUser.pending, (state) => {
-    //       state.isLoading = true; // обрабатывает успешное выполнение действия
-    //     });
-    builder.addCase(createUser.fulfilled, (state, { payload }) => {
-      state.currentUser = payload;
-    });
-    //     builder.addCase(getUser.rejected, (state) => {
-    //       state.isLoading = false; // обрабатывает ошибки
-    //     });
+    builder.addCase(createUser.fulfilled, addCurrentUser);
+    builder.addCase(loginUser.fulfilled, addCurrentUser);
+    builder.addCase(updateUser.fulfilled, addCurrentUser);
   },
 });
 
-export const { addItemToCart, toggleForm } = userSlice.actions;
+export const { addItemToCart, toggleForm, toggleFormType } = userSlice.actions;
 
 export default userSlice.reducer;
