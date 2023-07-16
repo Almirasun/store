@@ -16,16 +16,14 @@ export const getProducts = createAsyncThunk(
   }
 );
 
-const initialState = {
-  list: [],
-  filtered: [],
-  related: [],
-  isLoading: false,
-};
-
 export const productsSlice = createSlice({
   name: "products",
-  initialState,
+  initialState: {
+    list: [],
+    filtered: [],
+    related: [],
+    isLoading: false,
+  },
   reducers: {
     filterByPrice: (state, { payload }) => {
       state.filtered = state.list.filter(({ price }) => price < payload);
