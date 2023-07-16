@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineHeart } from "react-icons/ai";
+import { FiShoppingCart } from "react-icons/fi";
 
 import { ROUTES } from "../../utils/routes";
 import { toggleForm } from "../../features/user/userSlice";
@@ -16,7 +18,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   const [searchValue, setSearchValue] = useState("");
-  const { currentUser } = useSelector(({ user }) => user);
+  const { currentUser, cart } = useSelector(({ user }) => user);
 
   const [values, setValues] = useState({ name: "Guest", avatar: AVATAR });
 
@@ -97,19 +99,14 @@ const Header = () => {
 
         <div className={styles.account}>
           <Link to={ROUTES.HOME} className={styles.favorites}>
-            <svg className={styles["icon-fav"]}>
-              <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#heart`} />
-            </svg>
-            {/* <AiOutlineHeart /> */}
+            <AiOutlineHeart />
           </Link>
 
           <Link to={ROUTES.CART} className={styles.cart}>
-            <svg className={styles["icon-cart"]}>
-              <use xlinkHref={`${process.env.PUBLIC_URL}/sprite.svg#bag`} />
-            </svg>
-            {/* {!!cart.length && (
+            <FiShoppingCart />
+            {!!cart.length && (
               <span className={styles.count}>{cart.length}</span>
-            )} */}
+            )}
           </Link>
         </div>
       </div>
